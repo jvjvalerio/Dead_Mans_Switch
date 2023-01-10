@@ -1,13 +1,17 @@
-# Sample Hardhat Project
+Dead Man's Switch 💀
+A dead man's switch is a term used in many cases. The idea is pretty simple: if someone should become incapacitated, there is a way to detect it and act on it.
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+For our particular case we'll create a mechanism where the owner of a contract will need to ping or notify a contract every 52 weeks. If there is no activity during this time period, the recipient will be able to withdraw the funds. The assumption here is that the owner is no longer able to do so.
 
-Try running some of the following tasks:
+📖 We use 52 weeks as opposed to a year since weeks are an available global time unit in solidity: 52 weeks is valid code. Years are not globally available units due to leap years. Learn more here.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+🏁 Your Goal: Implement the Switch
+Create three functions on the Switch contract:
+
+A public, payable constructor which takes a single argument: the address for the eventual recipient of the funds.
+An external withdraw function which will transfer all of the contract funds to the recipient address.
+An external ping function which restarts the period of inactivity.
+🔒 Contract Security
+Ensure that only the owner can call ping. No other address should be able to delay the switch's withdrawal execution. Revert the transaction if the caller is any other address.
+
+Ensure that withdraw can only be called after 52 weeks of inactivity. If the owner has called ping or deployed the contract more recently than that, the withdrawal should be reverted.
